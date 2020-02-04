@@ -1,7 +1,7 @@
 /// <reference path='../_all.ts' />
 
 module todos {
-	'use strict';
+	"use strict";
 
 	/**
 	 * The main controller for the app. The controller:
@@ -9,7 +9,6 @@ module todos {
 	 * - exposes the model to the template and provides event handlers
 	 */
 	export class TodoCtrl {
-
 		private todos: TodoItem[];
 
 		// $inject annotation.
@@ -17,10 +16,10 @@ module todos {
 		// it is better to have it close to the constructor, because the parameters must match in count and type.
 		// See http://docs.angularjs.org/guide/di
 		public static $inject = [
-			'$scope',
-			'$location',
-			'todoStorage',
-			'filterFilter'
+			"$scope",
+			"$location",
+			"todoStorage",
+			"filterFilter"
 		];
 
 		// dependencies are injected via AngularJS $injector
@@ -33,7 +32,7 @@ module todos {
 		) {
 			this.todos = $scope.todos = todoStorage.get();
 
-			$scope.newTodo = '';
+			$scope.newTodo = "";
 			$scope.editedTodo = null;
 
 			// 'vm' stands for 'view model'. We're adding a reference to the controller to the scope
@@ -42,34 +41,39 @@ module todos {
 
 			// watching for events/changes in scope, which are caused by view/user input
 			// if you subscribe to scope or event with lifetime longer than this controller, make sure you unsubscribe.
-			$scope.$watch('todos', () => this.onTodos(), true);
-			$scope.$watch('location.path()', path => this.onPath(path))
+			$scope.$watch("todos", () => this.onTodos(), true);
+			$scope.$watch("location.path()", path => this.onPath(path));
 
-			if ($location.path() === '') $location.path('/');
+			if ($location.path() === "") $location.path("/");
 			$scope.location = $location;
 		}
 
 		onPath(path: string) {
-			this.$scope.statusFilter = (path === '/active') ?
-				{ completed: false } : (path === '/completed') ?
-				{ completed: true } : {};
+			this.$scope.statusFilter =
+				path === "/active"
+					? { completed: false }
+					: path === "/completed"
+					? { completed: true }
+					: {};
 		}
 
 		onTodos() {
-			this.$scope.remainingCount = this.filterFilter(this.todos, { completed: false }).length;
+			this.$scope.remainingCount = this.filterFilter(this.todos, {
+				completed: false
+			}).length;
 			this.$scope.doneCount = this.todos.length - this.$scope.remainingCount;
-			this.$scope.allChecked = !this.$scope.remainingCount
+			this.$scope.allChecked = !this.$scope.remainingCount;
 			this.todoStorage.put(this.todos);
 		}
 
 		addTodo() {
-			var newTodo : string = this.$scope.newTodo.trim();
+			var newTodo: string = this.$scope.newTodo.trim();
 			if (!newTodo.length) {
 				return;
 			}
 
 			this.todos.push(new TodoItem(newTodo, false));
-			this.$scope.newTodo = '';
+			this.$scope.newTodo = "";
 		}
 
 		editTodo(todoItem: TodoItem) {
@@ -103,12 +107,15 @@ module todos {
 		}
 
 		clearDoneTodos() {
-			this.$scope.todos = this.todos = this.todos.filter(todoItem => !todoItem.completed);
+			this.$scope.todos = this.todos = this.todos.filter(
+				todoItem => !todoItem.completed
+			);
 		}
 
 		markAll(completed: boolean) {
-			this.todos.forEach(todoItem => { todoItem.completed = completed; });
+			this.todos.forEach(todoItem => {
+				todoItem.completed = completed;
+			});
 		}
 	}
-
 }
