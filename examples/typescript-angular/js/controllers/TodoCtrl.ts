@@ -103,6 +103,7 @@ module todos {
 		}
 
 		removeTodo(todoItem: TodoItem) {
+			console.log(todoItem);
 			this.todos.splice(this.todos.indexOf(todoItem), 1);
 		}
 
@@ -116,6 +117,10 @@ module todos {
 			this.todos.forEach(todoItem => {
 				todoItem.completed = completed;
 			});
+		}
+
+		newMethod() {
+			console.log("This is test");
 		}
 	}
 }
